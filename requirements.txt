@@ -1,5 +1,6 @@
 langchain
 langchain_community
+langchain-openai
 chainlit
 openai
 requests
@@ -9,3 +10,4 @@ langchain_openai
 openai
 transformers
 torch
+pydantic
