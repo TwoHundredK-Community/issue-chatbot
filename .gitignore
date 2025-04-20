@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+
+# Virtual environments
+myenv/
+venv/
+*.venv/
+
+# Data
+data/repo/

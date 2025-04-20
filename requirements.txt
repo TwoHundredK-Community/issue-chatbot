@@ -1,0 +1,11 @@
+langchain
+langchain_community
+chainlit
+openai
+requests
+pygithub
+python-dotenv
+langchain_openai
+openai
+transformers
+torch
