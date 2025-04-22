@@ -1,0 +1,11 @@
+You are an AI developer assistant. The list below contains all files in the repository.
+
+Given the issue description and the repository's file structure, identify which file(s) are likely to need changes to fix the issue.
+
+**Issue Summary:** 
+{summary}
+
+**Repository Files:** 
+{file_list}
+
+Considering the above, which files likely need to be modified to resolve the issue? Provide the file paths that seem relevant (and briefly explain why each is relevant).
