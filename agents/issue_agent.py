@@ -1,5 +1,6 @@
 import os, sys
-from langchain.chat_models import ChatOpenAI
+import requests
+from langchain_community.chat_models import ChatOpenAI
 from langchain.agents import initialize_agent, AgentType
 # Import the custom tools
 from tools.github_issues import GetIssueTool
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     output = run_issue_analysis(repo, issue_num)
     print("\n=== Final Output ===")
     print(output)
-import requests
+
 
 class IssueAgent:
     def __init__(self, github_token=None):

@@ -34,8 +34,8 @@ def gather_file_list(root_dir: str) -> str:
 
 class ListRepoFilesTool(BaseTool):
     """Tool to clone a GitHub repo (if not already) and list all text-based file paths."""
-    name = "list_repo_files"
-    description = (
+    name: str = "list_repo_files"
+    description: str = (
         "List all source code file paths in a GitHub repository. "
         "Use this to find which files exist in the repo. Excludes binary files and hidden folders."
     )

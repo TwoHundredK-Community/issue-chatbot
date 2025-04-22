@@ -4,8 +4,8 @@ import os
 
 class GetIssueTool(BaseTool):
     """Tool to fetch a GitHub issue's title and body given repo and issue number."""
-    name = "get_issue"
-    description = (
+    name: str = "get_issue"
+    description: str = (
         "Retrieve a GitHub issue's title and body. "
         "Use this when given a repository name (owner/repo) and an issue number."
     )
