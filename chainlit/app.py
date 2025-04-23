@@ -1,3 +1,4 @@
+import logging
 import chainlit as cl
 import sys
 import os
@@ -26,7 +27,6 @@ async def main(message):
         return
 
     await cl.Message(content="Processing the GitHub issue...").send()
-
     # Call the agent logic
     try:
         #reasoning_steps, result = issue_agent.process_issue(message_content)
@@ -48,4 +48,5 @@ async def main(message):
         await cl.Message(content=f"Result:\n{result}").send()
 
     except Exception as e:
+        logging.exception(e)
         await cl.Message(content=f"An error occurred: {str(e)}").send()
