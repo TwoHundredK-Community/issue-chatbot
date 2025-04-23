@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
 
-from agents.issue_agent import IssueAgent
+from agents.issue_agent import run_issue_analysis, IssueAgent
 
-# Initialize the agent
+# Load environment variables
 load_dotenv()
 github_token = os.getenv("GITHUB_TOKEN")
 issue_agent = IssueAgent(github_token=github_token)
@@ -29,14 +29,23 @@ async def main(message):
 
     # Call the agent logic
     try:
-        reasoning_steps, result = issue_agent.process_issue(message_content)
+        #reasoning_steps, result = issue_agent.process_issue(message_content)
 
         # Stream reasoning steps
-        for step in reasoning_steps:
-            await cl.Message(content=step).send()
+        # for step in reasoning_steps:
+        #     await cl.Message(content=step).send()
+
+        # Extract repository and issue number from the URL
+        parts = message_content.rstrip('/').split('/')
+        repo_name = f"{parts[-4]}/{parts[-3]}"
+        issue_number = parts[-1]
+
+
+        # Run the issue analysis
+        result = run_issue_analysis(repo_name, issue_number)
 
         # Send the final result
-        await cl.Message(content=f"Result: {result}").send()
+        await cl.Message(content=f"Result:\n{result}").send()
 
     except Exception as e:
         await cl.Message(content=f"An error occurred: {str(e)}").send()

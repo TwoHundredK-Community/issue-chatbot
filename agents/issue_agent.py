@@ -1,7 +1,7 @@
 import os, sys
 import requests
-from langchain_community.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent, AgentType
+from langchain_openai import ChatOpenAI  # Updated import
+from langchain.agents import initialize_agent, AgentType  # Retained for now
 # Import the custom tools
 from tools.github_issues import GetIssueTool
 from tools.repo_utils import ListRepoFilesTool
@@ -16,7 +16,7 @@ def run_issue_analysis(repo_name: str, issue_number: str):
     )
     # Prepare tools
     tools = [GetIssueTool(), ListRepoFilesTool()]
-    # Initialize the agent with tools, using the ReAct chat agent type [oai_citation_attribution:13‡promptchap.com](https://promptchap.com/agents/#:~:text=tools%20%3D%20,)
+    # Initialize the agent with tools, using the ReAct chat agent type
     agent = initialize_agent(
         tools, llm,
         agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
@@ -31,8 +31,9 @@ def run_issue_analysis(repo_name: str, issue_number: str):
         f"3. Estimate the effort required to fix the issue (in hours).\n\n"
         f"Provide the list of relevant file paths and the estimated effort in hours as your final answer."
     )
-    # Run the agent on the prompt, which will invoke the tools as needed
-    result = agent.run(user_prompt)
+    # Pass the repo and issue number as a single input to the tools
+    formatted_input = f"{repo_name}#{issue_number}"
+    result = agent.run(formatted_input)
     return result
 
 if __name__ == "__main__":
