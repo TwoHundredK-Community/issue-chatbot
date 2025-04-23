@@ -13,9 +13,13 @@ from agents.issue_agent import IssueAgent
 issue_agent = IssueAgent()
 
 @cl.on_message
-async def main(message: str):
+async def main(message):
+    # Access the content of the message
+    message_content = message.content
+    print(f"Received message: {message_content}")
+    
     # Accept a GitHub issue link from the user
-    if not message.startswith("https://github.com/"):
+    if not message_content.startswith("https://github.com/"):
         await cl.Message(content="Please provide a valid GitHub issue link.").send()
         return
 
@@ -23,7 +27,7 @@ async def main(message: str):
 
     # Call the agent logic
     try:
-        reasoning_steps, result = issue_agent.process_issue(message)
+        reasoning_steps, result = issue_agent.process_issue(message_content)
 
         # Stream reasoning steps
         for step in reasoning_steps:
