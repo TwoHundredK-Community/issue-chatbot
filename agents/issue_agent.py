@@ -32,7 +32,7 @@ def run_issue_analysis(repo_name: str, issue_number: str):
         f"Provide the list of relevant file paths and the estimated effort in hours as your final answer."
     )
     # Pass the repo and issue number as a single input to the tools
-    formatted_input = f"{repo_name}#{issue_number}"
+    formatted_input = user_prompt.format(repo_name=repo_name, issue_number=issue_number)
     result = agent.run(formatted_input)
     return result
 
