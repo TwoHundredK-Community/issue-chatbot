@@ -1,7 +1,7 @@
 import chainlit as cl
-
 import sys
 import os
+from dotenv import load_dotenv
 
 # Add the project root directory to sys.path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -10,7 +10,9 @@ sys.path.append(project_root)
 from agents.issue_agent import IssueAgent
 
 # Initialize the agent
-issue_agent = IssueAgent()
+load_dotenv()
+github_token = os.getenv("GITHUB_TOKEN")
+issue_agent = IssueAgent(github_token=github_token)
 
 @cl.on_message
 async def main(message):

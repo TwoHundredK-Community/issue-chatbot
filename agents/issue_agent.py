@@ -133,12 +133,12 @@ class IssueAgent:
         title = issue_details['title']
         body = issue_details['body']
         code = f"""
-# Auto-generated code based on the issue: {title}
+          # Auto-generated code based on the issue: {title}
 
-def generated_function():
-    \"\"\"
-    {body}
-    \"\"\"
-    pass
-"""
+          def generated_function():
+              \"\"\"
+              {body}
+              \"\"\"
+              pass
+          """
         return code.strip()
