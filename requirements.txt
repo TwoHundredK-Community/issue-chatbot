@@ -12,3 +12,5 @@ transformers
 torch
 pydantic
 requests
+GitPython
+faiss-cpu

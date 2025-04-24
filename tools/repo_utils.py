@@ -1,6 +1,46 @@
 import os
 import subprocess
 from langchain.tools import BaseTool
+from langchain_community.document_loaders import GitLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings  # or your preferred model
+from langchain.vectorstores import FAISS
+from langchain.tools import tool
+import tempfile
+
+@tool
+def find_relevant_code(repo_url: str, issue_text: str, k: int = 5):
+    """Finds the most relevant files or functions in a GitHub repo based on an issue description.
+    Args:
+        repo_url (str): The URL of the GitHub repository.
+        issue_text (str): The text of the GitHub issue.
+        k (int): The number of relevant code snippets to return.
+    Returns:
+        List[Dict]: A list of dictionaries containing the source file and a snippet of the relevant code.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Load and split the codebase
+        loader = GitLoader(clone_url=repo_url, repo_path=tmpdir)
+        docs = loader.load()
+
+        splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+        chunks = splitter.split_documents(docs)
+
+        # Embed the chunks
+        embeddings = OpenAIEmbeddings()
+        vectorstore = FAISS.from_documents(chunks, embeddings)
+
+        # Embed the issue and search
+        relevant_docs = vectorstore.similarity_search(issue_text, k=k)
+
+        return [
+            {
+                "source": doc.metadata.get("source", ""),
+                "snippet": doc.page_content[:300]
+            }
+            for doc in relevant_docs
+        ]
+
 
 def clone_repository(repo: str, clone_dir: str) -> None:
     """Clone the GitHub repository to the specified local directory (if not already cloned)."""
