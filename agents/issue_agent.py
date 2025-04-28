@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI  # Updated import
 from langchain.agents import initialize_agent, AgentType  # Retained for now
 # Import the custom tools
 from tools.github_issues import GetIssueTool
-from tools.repo_utils import ListRepoFilesTool
+from tools.repo_utils import ListRepoFilesTool, find_relevant_code
 
 def run_issue_analysis(repo_name: str, issue_number: str):
     """Run the issue analysis agent on a given repo and issue number."""
@@ -15,11 +15,11 @@ def run_issue_analysis(repo_name: str, issue_number: str):
         verbose=False  # LLM itself won't print, we'll use agent verbose
     )
     # Prepare tools
-    tools = [GetIssueTool(), ListRepoFilesTool()]
+    tools = [GetIssueTool(), ListRepoFilesTool(), find_relevant_code]
     # Initialize the agent with tools, using the ReAct chat agent type
     agent = initialize_agent(
         tools, llm,
-        agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+        agent=AgentType.OPENAI_FUNCTIONS,
         verbose=True
     )
     # Define the task prompt for the agent
