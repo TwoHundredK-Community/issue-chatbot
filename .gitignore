@@ -17,3 +17,7 @@ data/repo/
 
 # Chainlit
 .chainlit/
+
+# Cloned Repos
+repo_clone/
+repos/
