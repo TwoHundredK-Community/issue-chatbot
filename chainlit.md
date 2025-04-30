@@ -1,13 +1,13 @@
-# Welcome to Chainlit! 🚀🤖
+# Welcome to the GitHub Issue Chatbot! 🚀🤖
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+Hi there, Developer! 👋 We're excited to have you on board. This chatbot is designed to help you analyze GitHub issues, provide time estimates, and suggest potential files that need to be changed. It's a valuable tool for navigating and managing complicated projects efficiently.
 
 ## Useful Links 🔗
 
 - **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
 - **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+We can't wait to see how this chatbot enhances your workflow! Happy coding! 💻😊
 
 ## Welcome screen
 
