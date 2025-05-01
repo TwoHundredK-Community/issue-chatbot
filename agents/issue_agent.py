@@ -1,21 +1,32 @@
-import os, sys
+import sys, os
 import requests
-from langchain_openai import ChatOpenAI  # Updated import
-from langchain.agents import initialize_agent, AgentType  # Retained for now
-# Import the custom tools
+from langchain_openai import ChatOpenAI 
+from langchain.agents import initialize_agent, AgentType
+from tools.azure_search_service import azure_ai_search
 from tools.github_issues import GetIssueTool
 from tools.repo_utils import ListRepoFilesTool, find_relevant_code
+from dotenv import load_dotenv
 
-def run_issue_analysis(repo_name: str, issue_number: str):
+load_dotenv()
+ALLOW_AZURE_AI_SEARCH = os.getenv("ALLOW_AZURE_AI_SEARCH", "false").lower() == "true"
+
+async def run_issue_analysis(repo_name: str, issue_number: str):
     """Run the issue analysis agent on a given repo and issue number."""
-    # Initialize the language model (GPT-4, or use gpt-3.5-turbo if needed)
     llm = ChatOpenAI(
         model_name="gpt-4",
         temperature=0,
-        verbose=False  # LLM itself won't print, we'll use agent verbose
+        verbose=False 
     )
+
     # Prepare tools
-    tools = [GetIssueTool(), ListRepoFilesTool(), find_relevant_code]
+    tools = [GetIssueTool(), ListRepoFilesTool()]
+
+    # Check if Azure AI Search is enabled
+    if ALLOW_AZURE_AI_SEARCH:
+        tools.append(azure_ai_search)
+    else:
+        tools.append(find_relevant_code)
+
     # Initialize the agent with tools, using the ReAct chat agent type
     agent = initialize_agent(
         tools, llm,
@@ -33,8 +44,14 @@ def run_issue_analysis(repo_name: str, issue_number: str):
     )
     # Pass the repo and issue number as a single input to the tools
     formatted_input = user_prompt.format(repo_name=repo_name, issue_number=issue_number)
-    result = agent.run(formatted_input)
-    return result
+
+    # Run the agent and yield reasoning steps manually
+    try:
+        result = agent.run(formatted_input)
+        for step in result.split("\n"):
+            yield step
+    except Exception as e:
+        yield f"Error during execution: {str(e)}"
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -44,7 +61,8 @@ if __name__ == "__main__":
     issue_num = sys.argv[2]
     output = run_issue_analysis(repo, issue_num)
     print("\n=== Final Output ===")
-    print(output)
+    for step in output:
+        print(step)
 
 
 class IssueAgent:

@@ -29,23 +29,17 @@ async def main(message):
     await cl.Message(content="Processing the GitHub issue...").send()
     # Call the agent logic
     try:
-        #reasoning_steps, result = issue_agent.process_issue(message_content)
-
-        # Stream reasoning steps
-        # for step in reasoning_steps:
-        #     await cl.Message(content=step).send()
-
         # Extract repository and issue number from the URL
         parts = message_content.rstrip('/').split('/')
         repo_name = f"{parts[-4]}/{parts[-3]}"
         issue_number = parts[-1]
 
-
-        # Run the issue analysis
-        result = run_issue_analysis(repo_name, issue_number)
+        # Run the issue analysis and stream reasoning steps
+        async for step in run_issue_analysis(repo_name, issue_number):
+            await cl.Message(content=step).send()
 
         # Send the final result
-        await cl.Message(content=f"Result:\n{result}").send()
+        await cl.Message(content="Analysis complete.").send()
 
     except Exception as e:
         logging.exception(e)

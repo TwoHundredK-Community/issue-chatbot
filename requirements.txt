@@ -14,3 +14,6 @@ pydantic
 requests
 GitPython
 faiss-cpu
+azure-core
+azure-search-documents
+azure-identity

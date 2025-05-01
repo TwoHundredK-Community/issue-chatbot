@@ -41,7 +41,7 @@ def find_relevant_code(repo_url: str, issue_text: str, k: int = 5):
             for doc in relevant_docs
         ]
 
-
+@tool
 def clone_repository(repo: str, clone_dir: str) -> None:
     """Clone the GitHub repository to the specified local directory (if not already cloned)."""
     repo_url = f"https://github.com/{repo}.git"
@@ -52,6 +52,7 @@ def clone_repository(repo: str, clone_dir: str) -> None:
     if result.returncode != 0:
         raise RuntimeError(f"Git clone failed: {result.stderr}")
 
+@tool
 def gather_file_list(root_dir: str) -> str:
     """Walk through the repository directory and return a string listing all files (excluding certain dirs/files)."""
     file_paths = []
