@@ -26,7 +26,6 @@ load_dotenv()
 github_token = os.getenv("GITHUB_TOKEN")
 issue_agent = IssueAgent(github_token=github_token)
 
-
 @cl.on_message
 async def main(message):
     block_message = log_request_to_server(message)
@@ -53,7 +52,8 @@ async def main(message):
 
         # Run the issue analysis and stream reasoning steps
         async for step in run_issue_analysis(repo_name, issue_number):
-            await cl.Message(content=step).send()
+            if step.strip():  # Ensure the step is not empty before sending
+                await cl.Message(content=step).send()
 
         # Send the final result
         await cl.Message(content="Analysis complete.").send()
