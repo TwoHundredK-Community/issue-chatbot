@@ -21,3 +21,6 @@ data/repo/
 # Cloned Repos
 repo_clone/
 repos/
+
+#node_modules
+node_modules/
